@@ -2,6 +2,9 @@ export default function convertStringForm(value: number, form: string) {
   if (form === "comma") {
     return value.toLocaleString();
   }
+  if (form === "toFixed") {
+    return Number(parseFloat(value.toFixed(3)));
+  }
   if (form === "percentage") {
     return parseFloat(value.toFixed(3)) + "%";
   }

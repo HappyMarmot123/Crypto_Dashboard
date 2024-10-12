@@ -57,7 +57,7 @@ const ECommerce: React.FC = () => {
         svg: <SvgThree />,
       },
       {
-        title: "업데이트 날짜",
+        title: "최근 업데이트 날짜",
         total: convertStringForm(contextValue.updatedDt, "date") || "",
         svg: <SvgFour />,
       },
