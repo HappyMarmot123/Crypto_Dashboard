@@ -1,0 +1,127 @@
+package com.example.demo.statistic;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.bson.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.ObjectOperators.ObjectToArray;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
+import org.springframework.data.mongodb.core.aggregation.SortOperation;
+import org.springframework.data.mongodb.core.aggregation.UnwindOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.component.CoinGeckoApi;
+import com.example.demo.component.ScheduledTasks;
+
+import lombok.RequiredArgsConstructor;
+ 
+
+@RequiredArgsConstructor
+@Service
+public class StatisticServiceImpl {
+
+	private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private final CoinGeckoApi coinGeckoApi;
+	private final MongoTemplate mongoTemplate;
+	
+    public void requestApi() {
+    	try {
+    		String resonse = coinGeckoApi.fetchGlobalData();
+        	mongoTemplate.insert(resonse, "DailyTrend");
+        	log.info(resonse);
+        	log.info("Insert response into DB", dateFormat.format(new Date()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public Document getStatistic() {
+    	try {
+            // 가장 최근 문서를 찾기 위한 쿼리
+            Query query = new Query();
+            query.with(Sort.by(
+                    Sort.Order.desc("data.updated_at")))
+                    .limit(1);
+
+            // 최근 문서 가져오기
+            StatisticEntity results = mongoTemplate.findOne(query, StatisticEntity.class);
+            if (results == null) {
+                return null; // 결과가 없을 경우
+            }
+
+
+//            db.DailyTrend.aggregate([
+//                                     { "$sort": { "data.updated_at": -1 }}, 
+//            							{ "$limit": 1 },
+//                                     { "$project": {
+//                                         "_id": 1,
+//                                         "data": 1,
+//                                         "totalMarketCap": { "$objectToArray": "$data.total_market_cap" }  
+//                                     }},
+//                                     { "$sort": { "totalMarketCap.v": -1 }},
+//                                 ]);
+
+
+            Aggregation aggregation = Aggregation.newAggregation(
+            	    Aggregation.sort(Sort.by(Sort.Order.desc("data.updated_at"))),
+            	    Aggregation.limit(1),
+            	    Aggregation.project("_id", "data")
+            	        .and(ObjectToArray.valueOfToArray("data.total_market_cap")).as("totalMarketCap"),
+            	    Aggregation.unwind("totalMarketCap"),  // totalMarketCap 배열을 펼침
+            	    Aggregation.sort(Sort.by(Sort.Order.desc("totalMarketCap.v"))),  // totalMarketCap.v 기준으로 정렬
+            	    Aggregation.group("_id")  // 그룹화
+            	        .first("data").as("data")
+            	        .push("totalMarketCap").as("sortedTotalMarketCap")  // 정렬된 totalMarketCap 배열 저장
+            	);
+
+            
+            AggregationResults results2 = mongoTemplate.aggregate(aggregation, "DailyTrend", StatisticEntity.class);
+            Document asdf = results2.getRawResults();
+            
+//            db.DailyTrend.aggregate([
+//                                     { "$match": { "_id": ObjectId("6707ebf06d64380aefe02d35") }},
+//                                     { "$project": { totalMarketCap: { "$objectToArray": "$data.total_market_cap" }}},
+//                                     { "$unwind": "$totalMarketCap" },
+//                                     { "$group": {
+//                                         _id: "average",
+//                                         averageTotalMarketCap: { "$avg": "$totalMarketCap.v" }
+//                                     }}
+//                                   ])
+            
+            // Aggregation 쿼리
+            Aggregation aggregation2 = Aggregation.newAggregation(
+//                    Aggregation.match(Criteria.where("_id").is(new org.bson.types.ObjectId(id))),
+            		Aggregation.sort(Sort.by(Sort.Order.desc("data.updated_at"))),
+            		Aggregation.limit(1),
+                    Aggregation.project("data.total_market_cap")
+                            .and(ObjectToArray.valueOfToArray("data.total_market_cap")).as("totalMarketCap"),
+                    Aggregation.unwind("totalMarketCap"),
+                    Aggregation.group()
+                            .avg("totalMarketCap.v").as("averageTotalMarketCap")
+            );
+
+
+            // Aggregation 실행
+            AggregationResults<AverageResult> averages = mongoTemplate.aggregate(aggregation2, "DailyTrend", AverageResult.class);
+            List<AverageResult> results3 = averages.getMappedResults();
+
+            return asdf;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return null;
+    }
+}

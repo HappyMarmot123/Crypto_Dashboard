@@ -1,0 +1,23 @@
+server:
+  servlet:
+    context-path: /welcome
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  port: 8000
+  tomcat:
+    connection-timeout: 120000
+  
+logging:
+  level:
+    root: info
+    
+#  data:
+#    mongodb:
+#      database: kaia_dev
+#      host: 218.153.121.201
+#      port: 27017
+#      authentication-database: admin
+#      username: wapdev
+#      password: dev2.WAPDEV.1024&^*

@@ -1,0 +1,142 @@
+package com.example.demo.statistic;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.ObjectOperators.ObjectToArray;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
+import org.springframework.data.mongodb.core.aggregation.UnwindOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.component.CoinGeckoApi;
+import com.example.demo.component.ScheduledTasks;
+
+import lombok.RequiredArgsConstructor;
+ 
+
+@RequiredArgsConstructor
+@Service
+public class StatisticServiceImpl {
+
+	private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private final CoinGeckoApi coinGeckoApi;
+	private final MongoTemplate mongoTemplate;
+	
+    public void requestApi() {
+    	try {
+    		String resonse = coinGeckoApi.fetchGlobalData();
+        	mongoTemplate.insert(resonse, "DailyTrend");
+        	log.info(resonse);
+        	log.info("Insert response into DB", dateFormat.format(new Date()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public StatisticEntity getStatistic() {
+    	try {
+            // 가장 최근 문서를 찾기 위한 쿼리
+            Query query = new Query();
+            query.with(Sort.by(
+                    Sort.Order.desc("data.updated_at"),
+                    Sort.Order.desc("data.total_market_cap"),
+                    Sort.Order.desc("data.total_volume")))
+                    .limit(1);
+
+            // 최근 문서 가져오기
+            StatisticEntity results = mongoTemplate.findOne(query, StatisticEntity.class);
+            if (results == null) {
+                return null; // 결과가 없을 경우
+            }
+
+            String id = results.getId();
+
+//            db.DailyTrend.aggregate([
+//                                     { "$sort": { "data.updated_at": -1 }},  // 최신 업데이트 기준으로 정렬
+//                                     { "$project": {
+//                                         "_id": 1,
+//                                         "data": 1,
+//                                         "totalMarketCap": { "$objectToArray": "$data.total_market_cap" }  // total_market_cap을 배열로 변환
+//                                     }},
+//                                     { "$unwind": "$totalMarketCap" },  // 배열을 개별 문서로 변환
+//                                     { "$sort": { "totalMarketCap.v": -1 }},  // total_market_cap의 값으로 내림차순 정렬
+//                                         { "$group": {  // 같은 문서로 다시 그룹화
+//                                         "_id": "$_id",
+//                                         "data": { "$first": "$data" },
+//                                         "sortedTotalMarketCap": { "$push": "$totalMarketCap" }  // 정렬된 배열로 저장
+//                                     }},
+//                                     { "$project": {
+//                                         "_id": 1,
+//                                         "data": 1,
+//                                         "sortedTotalMarketCap": 1  // 최종 결과로 정렬된 total_market_cap 배열 포함
+//                                     }},
+//                                 ]);
+            
+            MatchOperation matchOperation = Aggregation.match(Criteria.where("data.updated_at").exists(true));
+            UnwindOperation unwindOperation = Aggregation.unwind("totalMarketCap");
+            ProjectionOperation projectOperation = Aggregation.project("_id", "data")
+                    .and(ObjectToArray.valueOfToArray("data.total_market_cap")).as("totalMarketCap");
+            
+            GroupOperation groupOperation = Aggregation.group("_id")
+                    .first("data").as("data")
+                    .push("totalMarketCap").as("sortedTotalMarketCap");
+
+            ProjectionOperation finalProjectOperation = Aggregation.project("_id", "data", "sortedTotalMarketCap");
+
+            Aggregation aggregation = Aggregation.newAggregation(
+                    matchOperation,
+                    projectOperation,
+                    unwindOperation,
+                    Aggregation.sort(Sort.by(Sort.Order.desc("totalMarketCap.v"))),
+                    groupOperation,
+                    finalProjectOperation
+            );
+            
+            AggregationResults results2 = mongoTemplate.aggregate(aggregation, "DailyTrend", AverageResult.class);
+            
+//            db.DailyTrend.aggregate([
+//                                     { "$match": { "_id": ObjectId("6707ebf06d64380aefe02d35") }},
+//                                     { "$project": { totalMarketCap: { "$objectToArray": "$data.total_market_cap" }}},
+//                                     { "$unwind": "$totalMarketCap" },
+//                                     { "$group": {
+//                                         _id: "average",
+//                                         averageTotalMarketCap: { "$avg": "$totalMarketCap.v" }
+//                                     }}
+//                                   ])
+            
+            // Aggregation 쿼리
+            Aggregation aggregation2 = Aggregation.newAggregation(
+//                    Aggregation.match(Criteria.where("_id").is(new org.bson.types.ObjectId(id))),
+            		 Aggregation.sort(Sort.by(Sort.Order.desc("data.updated_at"))),
+                    Aggregation.project("data.total_market_cap")
+                            .and(ObjectToArray.valueOfToArray("data.total_market_cap")).as("totalMarketCap"),
+                    Aggregation.unwind("totalMarketCap"),
+                    Aggregation.group()
+                            .avg("totalMarketCap.v").as("averageTotalMarketCap")
+            );
+
+
+            // Aggregation 실행
+            AggregationResults<AverageResult> averages = mongoTemplate.aggregate(aggregation2, "DailyTrend", AverageResult.class);
+            List<AverageResult> results3 = averages.getMappedResults();
+
+            return null;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return null;
+    }
+}

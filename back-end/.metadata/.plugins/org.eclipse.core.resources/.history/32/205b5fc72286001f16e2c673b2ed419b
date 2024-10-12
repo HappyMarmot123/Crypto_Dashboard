@@ -1,0 +1,29 @@
+package com.example.demo.statistic;
+
+import java.util.Map;
+
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Data {
+	@Column(name="active_cryptocurrencies")
+	@Field(name="active_cryptocurrencies")
+    private int active_cryptocurrencies;
+    private int upcoming_icos;
+    private int ongoing_icos;
+    private int ended_icos; 
+    private int markets;
+    private Map<String, Double> total_market_cap;
+    private Map<String, Double> total_volume;
+    private Map<String, Double> market_cap_percentage;
+    private double market_cap_change_percentage_24h_usd;
+    private long updated_at;
+}

@@ -1,0 +1,8 @@
+package com.example.demo.statistic;
+
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+
+
+public interface StatisticQuery  extends QuerydslPredicateExecutor<BarometerDataEntity> {
+
+}

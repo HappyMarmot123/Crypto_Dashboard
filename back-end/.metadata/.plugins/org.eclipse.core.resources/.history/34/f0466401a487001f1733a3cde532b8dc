@@ -1,0 +1,20 @@
+package com.example.demo.statistic.repository;
+
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import jakarta.persistence.Column;
+
+public class DataWrapper {
+	
+	@Column(name="market_cap_change_percentage_24h_usd")
+	@Field(name="market_cap_change_percentage_24h_usd")
+    private Double marketCapChangePercentage24hUsd;
+
+    public Double getMarketCapChangePercentage24hUsd() {
+        return marketCapChangePercentage24hUsd;
+    }
+
+    public void setMarketCapChangePercentage24hUsd(Double marketCapChangePercentage24hUsd) {
+        this.marketCapChangePercentage24hUsd = marketCapChangePercentage24hUsd;
+    }
+}

@@ -1,0 +1,24 @@
+package com.example.demo.statistic;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class StatisticDto {
+	
+	@Getter
+	public static class DetailRequest {
+		
+		private String time_period;
+		
+		@Builder
+		public DetailRequest(String time_period) {
+			this.time_period = time_period;
+		}
+	}
+	
+	
+}

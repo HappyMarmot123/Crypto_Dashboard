@@ -1,0 +1,21 @@
+package com.example.demo.statistic;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@Document(collection = "DailyTrend")
+public class StatisticEntity {
+	
+	@Id
+    private String id;
+	private DataEntity data;
+}
+
+

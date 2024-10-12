@@ -1,0 +1,14 @@
+server:
+  port: 8088
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  tomcat:
+    connection-timeout: 120000
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/coinTrend

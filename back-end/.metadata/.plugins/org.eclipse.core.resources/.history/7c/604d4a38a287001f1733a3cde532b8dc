@@ -1,0 +1,5 @@
+package com.example.demo.statistic.repository;
+
+public class DataWrapper {
+
+}

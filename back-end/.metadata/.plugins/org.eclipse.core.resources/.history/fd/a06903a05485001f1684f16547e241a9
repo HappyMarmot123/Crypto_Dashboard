@@ -1,0 +1,40 @@
+package com.example.demo.statistic.repository;
+
+import com.example.demo.statistic.StatisticDocument;
+import com.querydsl.core.types.Path;
+import com.querydsl.core.types.PathMetadata;
+import com.querydsl.core.types.dsl.EntityPathBase;
+import com.querydsl.core.types.dsl.MapPath;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
+
+public class QStatisticDocument extends EntityPathBase<StatisticDocument> {
+    private static final long serialVersionUID = 1L;
+
+    public static final QStatisticDocument statisticDocument = new QStatisticDocument("statisticDocument");
+
+    public final StringPath id = createString("id");
+    public final StringPath createdAt = createString("createdAt");
+    public final NumberPath<Integer> activeCryptocurrencies = createNumber("activeCryptocurrencies", Integer.class);
+    public final NumberPath<Integer> upcomingIcos = createNumber("upcomingIcos", Integer.class);
+    public final NumberPath<Integer> ongoingIcos = createNumber("ongoingIcos", Integer.class);
+    public final NumberPath<Integer> endedIcos = createNumber("endedIcos", Integer.class);
+    public final NumberPath<Integer> markets = createNumber("markets", Integer.class);
+    public final MapPath<String, Double, NumberPath<Double>> totalMarketCap = new MapPath<>("totalMarketCap", String.class, new DoublePath());
+    public final MapPath<String, Double, NumberPath<Double>> totalVolume = new MapPath<>("totalVolume", String.class, new DoublePath());
+    public final MapPath<String, Double, NumberPath<Double>> marketCapPercentage = new MapPath<>("marketCapPercentage", String.class, new DoublePath());
+    public final NumberPath<Double> marketCapChangePercentage24hUsd = createNumber("marketCapChangePercentage24hUsd", Double.class);
+    public final NumberPath<Long> updatedAt = createNumber("updatedAt", Long.class);
+
+    public QStatisticDocument(String variable) {
+        super(StatisticDocument.class, variable);
+    }
+
+    public QStatisticDocument(Path<? extends StatisticDocument> path) {
+        super(path.getType(), path.getMetadata());
+    }
+
+    public QStatisticDocument(PathMetadata metadata) {
+        super(StatisticDocument.class, metadata);
+    }
+}

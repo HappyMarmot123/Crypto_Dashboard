@@ -1,0 +1,60 @@
+package com.example.demo.statistic;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Document(collection = "BarometerData")
+public class StatisticDocument {
+	
+	@MongoId
+	@Column(name="_id")
+	@Field(name="_id")
+	private String _id;
+	
+	@Column(name="payload_id")
+    @Field(name="payload_id")
+    private String payloadId;
+	
+	@Column(name="id")
+    @Field(name="id")
+    private String id;
+
+	@Column(name="pressure")
+	@Field(name="pressure")
+	private Double pressure;
+	
+	@Column(name="baro_id")
+    @Field(name="baro_id")
+    private String baroId;
+	
+	@Column(name="timestamp")
+	@Field(name="timestamp")
+    private Object timestamp;
+
+	private int row_num;
+	
+	@Builder
+	public BarometerDataEntity(String _id, String payloadId, String id, Double pressure, 
+			String baroId, Object timestamp, int row_num) {
+		this._id = _id;
+		this.payloadId = payloadId;
+		this.id = id;
+		this.pressure = pressure;
+		this.baroId = baroId;
+		this.timestamp = timestamp;
+		this.row_num = row_num;
+	}
+	
+}
+
+

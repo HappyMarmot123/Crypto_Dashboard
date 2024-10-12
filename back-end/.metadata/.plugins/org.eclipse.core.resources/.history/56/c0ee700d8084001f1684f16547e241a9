@@ -1,0 +1,10 @@
+package com.example.demo.statistic;
+
+import java.util.List; 
+import java.util.Map;
+
+import com.example.demo.statistic.StatisticDto;
+
+public interface StatisticService {
+	List<?> requestApi(StatisticDto.DetailRequest request);
+}

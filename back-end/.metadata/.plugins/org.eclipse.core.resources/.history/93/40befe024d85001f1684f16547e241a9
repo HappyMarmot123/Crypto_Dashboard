@@ -1,0 +1,81 @@
+package com.example.demo.statistic;
+import java.util.Map;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@Document(collection = "DailyTrend")
+public class StatisticDocument {
+	
+	@MongoId
+    @Field(name = "id")
+    private String id;
+
+    @CreatedDate
+    @Field(name = "created_at")
+    private String createdAt;
+
+    @Field(name = "active_cryptocurrencies")
+    private int activeCryptocurrencies;
+
+    @Field(name = "upcoming_icos")
+    private int upcomingIcos;
+
+    @Field(name = "ongoing_icos")
+    private int ongoingIcos;
+
+    @Field(name = "ended_icos")
+    private int endedIcos;
+
+    @Field(name = "markets")
+    private int markets;
+
+    @Field(name = "total_market_cap")
+    private Map<String, Double> totalMarketCap;
+
+    @Field(name = "total_volume")
+    private Map<String, Double> totalVolume;
+
+    @Field(name = "market_cap_percentage")
+    private Map<String, Double> marketCapPercentage;
+
+    @Field(name = "market_cap_change_percentage_24h_usd")
+    private double marketCapChangePercentage24hUsd;
+
+    @Field(name = "updated_at")
+    private long updatedAt;
+
+    @Builder
+    public StatisticDocument(String id, String createdAt, int activeCryptocurrencies, int upcomingIcos,
+                             int ongoingIcos, int endedIcos, int markets,
+                             Map<String, Double> totalMarketCap, Map<String, Double> totalVolume,
+                             Map<String, Double> marketCapPercentage, double marketCapChangePercentage24hUsd,
+                             long updatedAt) {
+        this.id = id;
+        this.createdAt = createdAt;
+        this.activeCryptocurrencies = activeCryptocurrencies;
+        this.upcomingIcos = upcomingIcos;
+        this.ongoingIcos = ongoingIcos;
+        this.endedIcos = endedIcos;
+        this.markets = markets;
+        this.totalMarketCap = totalMarketCap;
+        this.totalVolume = totalVolume;
+        this.marketCapPercentage = marketCapPercentage;
+        this.marketCapChangePercentage24hUsd = marketCapChangePercentage24hUsd;
+        this.updatedAt = updatedAt;
+    }
+}
+
+

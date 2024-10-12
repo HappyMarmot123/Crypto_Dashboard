@@ -1,0 +1,6 @@
+package com.example.demo.statistic;
+
+@Repository
+public class StatisticRepository {
+
+}

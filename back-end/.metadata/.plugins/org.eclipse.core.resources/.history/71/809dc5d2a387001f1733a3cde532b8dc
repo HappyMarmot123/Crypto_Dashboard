@@ -1,0 +1,13 @@
+package com.example.demo.statistic.repository;
+
+public class DataWrapper {
+    private Double marketCapChangePercentage24hUsd;
+
+    public Double getMarketCapChangePercentage24hUsd() {
+        return marketCapChangePercentage24hUsd;
+    }
+
+    public void setMarketCapChangePercentage24hUsd(Double marketCapChangePercentage24hUsd) {
+        this.marketCapChangePercentage24hUsd = marketCapChangePercentage24hUsd;
+    }
+}

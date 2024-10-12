@@ -1,0 +1,51 @@
+1728279986227	Rename resource 'application.properties'
+1728282224543	Copy compilation unit
+1728282270308	Delete element
+1728282490523	Rename resource 'application.yml'
+1728282685204	Delete element
+1728282695982	Rename resource 'application.properties'
+1728283523642	Delete element
+1728283533860	Rename package 'com.example.welcome'
+1728283810735	Rename package 'com.example.app.statistic'
+1728283822769	Rename compilation unit 'ServerApplication.java'
+1728285530705	Delete element
+1728285838300	Rename compilation unit 'corsConfig.java'
+1728285965917	Rename type 'PayloadDataController'
+1728285972450	Rename type 'PayloadDataService'
+1728285977869	Rename type 'PayloadDataServiceImpl'
+1728285982761	Rename type 'PayloadDataDto'
+1728286730528	Delete element
+1728288913931	Delete element
+1728289948690	Rename type 'CoinMarketCapApi'
+1728367561904	Delete element
+1728368921281	Rename type 'StatisticEntity'
+1728368998689	Copy compilation unit
+1728369032663	Delete element
+1728369090079	Rename type 'StatisticRepository'
+1728369168407	Rename type 'StatisticQuery'
+1728370234398	Delete element
+1728371707798	Delete element
+1728373317950	Delete element
+1728373546204	Move compilation unit
+1728373783334	Rename package 'com.example.demo.statistic.regository'
+1728376320275	Rename resource 'asdf'
+1728377587845	Delete element
+1728378398027	Delete element
+1728379310594	Delete element
+1728447966640	Rename compilation unit 'StatisticDocument.java'
+1728453950490	Rename package 'com.example.demo.client'
+1728458975771	Rename type 'DatEntity'
+1728459114807	Rename compilation unit 'DataEntity.java'
+1728473911726	Delete element
+1728528110987	Rename resource 'application.yml'
+1728528118664	Rename resource 'd'
+1728528456737	Rename resource 'application.properties'
+1728528639015	Rename resource 'application.yml'
+1728528681554	Rename resource 'application.properties'
+1728608543920	Rename resource 'application.yml'
+1728608644289	Rename resource 'application.properites'
+1728631578341	Move compilation unit
+1728631581160	Move compilation unit
+1728631586102	Move compilation unit
+1728631589870	Move compilation unit
+1728631594618	Move compilation unit

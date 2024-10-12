@@ -1,0 +1,60 @@
+package com.example.demo.statistic;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
+@ToString
+@Document(collection = "DailyTrend")
+public class StatisticEntity {
+	
+	@MongoId
+	@Column(name="_id")
+	@Field(name="_id")
+    private String _id;
+	
+	@Column(name="data")
+	@Field(name="data")
+	private Data data; // Data 클래스를 필드로 추가
+	
+	@Field(name = "sortedTotalMarketCap")
+	private List<TotalMarketCap> sortedTotalMarketCap;
+	
+    public static class TotalMarketCap {
+        private String k;
+        private BigDecimal v;
+
+        public String getK() {
+            return k;
+        }
+
+        public void setK(String k) {
+            this.k = k;
+        }
+
+        public BigDecimal getV() {
+            return v;
+        }
+
+        public void setV(BigDecimal v) {
+            this.v = v;
+        }
+    }
+
+    public Data getData() {
+        return data;
+    }
+}

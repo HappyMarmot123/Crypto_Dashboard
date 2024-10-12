@@ -1,0 +1,41 @@
+package com.example.demo.statistic;
+
+import java.util.Map;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@Entity
+@Document(collection = "DailyTrend")
+public class StatisticEntity {
+	
+	@MongoId
+	@Column(name="_id")
+	@Field(name="_id")
+    private String _id;
+	
+	@Column(name="data")
+	@Field(name="data")
+	private Data data; // Data 클래스를 필드로 추가
+
+	@Override
+	public String toString() {
+		return "StatisticEntity [_id=" + _id + ", data=" + data + "]";
+	}
+
+    @Builder
+    public StatisticEntity(String _id, Data data) {
+        this._id = _id;
+        this.data = data;
+    }
+}

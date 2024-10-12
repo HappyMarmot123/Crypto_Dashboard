@@ -1,0 +1,19 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /welcome
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  tomcat:
+    connection-timeout: 120000
+
+#  data:
+#    mongodb:
+#      database: kaia_dev
+#      host: 218.153.121.201
+#      port: 27017
+#      authentication-database: admin
+#      username: wapdev
+#      password: dev2.WAPDEV.1024&^*

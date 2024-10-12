@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="com.squareup.okhttp.Response"/>
+    <fullyQualifiedTypeName name="com.squareup.okhttp.Request"/>
+    <fullyQualifiedTypeName name="com.mongodb.MongoClient"/>
+    <fullyQualifiedTypeName name="com.querydsl.core.types.Path"/>
+    <fullyQualifiedTypeName name="lombok.Value"/>
+    <fullyQualifiedTypeName name="org.springframework.beans.factory.annotation.Value"/>
+    <fullyQualifiedTypeName name="org.springframework.data.annotation.Id"/>
+    <fullyQualifiedTypeName name="org.slf4j.Logger"/>
+    <fullyQualifiedTypeName name="java.util.Date"/>
+    <fullyQualifiedTypeName name="java.util.Comparator"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="org.springframework.data.mongodb.core.query.Query"/>
+    <fullyQualifiedTypeName name="org.springframework.data.mongodb.core.aggregation.Aggregation"/>
+    <fullyQualifiedTypeName name="com.example.demo.statistic.StatisticEntity"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+</qualifiedTypeNameHistroy>

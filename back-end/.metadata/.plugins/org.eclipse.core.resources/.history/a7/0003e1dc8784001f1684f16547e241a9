@@ -1,0 +1,22 @@
+package com.example.demo.client;
+
+import org.springframework.stereotype.Component;
+
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+@Component
+public class CoinGeckoApi {
+
+	OkHttpClient client = new OkHttpClient();
+
+	Request request = new Request.Builder()
+	  .url("https://api.coingecko.com/api/v3/global")
+	  .get()
+	  .addHeader("accept", "application/json")
+	  .addHeader("x-cg-demo-api-key", "CG-JbGd9nxRsDpasAXNHcdiLEnn")
+	  .build();
+
+	Response response = client.newCall(request).execute();
+}

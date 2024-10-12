@@ -1,0 +1,9 @@
+package com.example.demo.statistic;
+
+import java.util.List; 
+import java.util.Map;
+
+
+public interface StatisticService {
+	List<?> requestApi();
+}

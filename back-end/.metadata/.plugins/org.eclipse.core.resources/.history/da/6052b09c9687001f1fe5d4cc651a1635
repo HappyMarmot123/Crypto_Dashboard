@@ -1,0 +1,41 @@
+package com.example.demo.component;
+
+import java.io.IOException;
+
+import org.json.JSONObject;
+import org.springframework.stereotype.Component;
+
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+@Component
+public class CoinGeckoApi {
+    private final OkHttpClient client;
+
+    public CoinGeckoApi() {
+        this.client = new OkHttpClient();
+    }
+
+    public String fetchGlobalData() throws IOException {
+    	// 전체 암호화폐 시가총액 등을 포함한 글로벌 데이터
+        Request requestA = new Request.Builder()
+            .url("https://api.coingecko.com/api/v3/global")
+            .get()
+            .addHeader("accept", "application/json")
+            .addHeader("x-cg-demo-api-key", "CG-JbGd9nxRsDpasAXNHcdiLEnn")
+            .build();
+
+        Response response = client.newCall(requestA).execute();
+        try {
+            if (response.isSuccessful()) {
+            	String json = response.body().string();
+            	return json;
+            } else {
+                throw new IOException("Unexpected code " + response);
+            }
+        } finally {
+        	
+        }
+    }
+}

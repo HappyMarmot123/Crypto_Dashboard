@@ -1,0 +1,59 @@
+package com.example.demo.statistic;
+
+import java.util.Map;
+
+import org.springframework.data.mongodb.core.mapping.Field;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@Entity
+@Builder
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+public class Data {
+	@Column(name="active_cryptocurrencies")
+	@Field(name="active_cryptocurrencies")
+    private int active_cryptocurrencies;
+	@Column(name="upcoming_icos")
+	@Field(name="upcoming_icos")
+    private int upcoming_icos;
+	@Column(name="ongoing_icos")
+	@Field(name="ongoing_icos")
+    private int ongoing_icos;
+	@Column(name="ended_icos")
+	@Field(name="ended_icos")
+    private int ended_icos; 
+	@Column(name="markets")
+	@Field(name="markets")
+    private int markets;
+	@Column(name="total_market_cap")
+	@Field(name="total_market_cap")
+    private Map<String, Double> total_market_cap;
+	@Column(name="total_volume")
+	@Field(name="total_volume")
+    private Map<String, Double> total_volume;
+	@Column(name="market_cap_percentage")
+	@Field(name="market_cap_percentage")
+    private Map<String, Double> market_cap_percentage;
+	@Column(name="market_cap_change_percentage_24h_usd")
+	@Field(name="market_cap_change_percentage_24h_usd")
+    private double market_cap_change_percentage_24h_usd;
+	@Column(name="updated_at")
+	@Field(name="updated_at")
+    private long updated_at;
+	@Override
+	public String toString() {
+		return "Data [active_cryptocurrencies=" + active_cryptocurrencies + ", upcoming_icos=" + upcoming_icos
+				+ ", ongoing_icos=" + ongoing_icos + ", ended_icos=" + ended_icos + ", markets=" + markets
+				+ ", total_market_cap=" + total_market_cap + ", total_volume=" + total_volume
+				+ ", market_cap_percentage=" + market_cap_percentage + ", market_cap_change_percentage_24h_usd="
+				+ market_cap_change_percentage_24h_usd + ", updated_at=" + updated_at + "]";
+	}
+	
+	
+}

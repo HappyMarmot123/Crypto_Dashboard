@@ -1,0 +1,20 @@
+package com.example.demo.statistic;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface StatisticRepository extends MongoRepository<StatisticDocument, String>, QuerydslPredicateExecutor<StatisticDocument> {
+	
+	private final MongoTemplate mongoTemplate;
+	
+
+    public List<StatisticDocument> findAll() {
+        return mongoTemplate.findAll(StatisticDocument.class);
+    }
+}

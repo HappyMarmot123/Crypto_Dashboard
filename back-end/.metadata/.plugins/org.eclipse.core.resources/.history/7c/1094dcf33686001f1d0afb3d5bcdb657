@@ -1,0 +1,52 @@
+package com.example.demo.statistic;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@RestController
+@RequestMapping(value="/statistic")
+public class StatisticController {
+	
+    private final StatisticServiceImpl statisticService;
+
+    @Autowired
+    public StatisticController(StatisticServiceImpl statisticService) {
+        this.statisticService = statisticService;
+    }
+
+    @GetMapping("/")
+    public Data getStatistic() {
+        List<StatisticEntity> results = statisticService.getStatistic();
+		
+        if (!results.isEmpty()) {
+            StatisticEntity statisticEntity = results.get(0); // Get the first entity
+            Data data =  statisticEntity.getData(); // Return the data directly
+            Map<String, Object> response = new HashMap<>();
+            response.put("active_cryptocurrencies", data.getActive_cryptocurrencies());
+            response.put("markets", data.getMarkets());
+            response.put("total_market_cap", data.getTotal_market_cap());
+            response.put("total_volume", data.getTotal_volume());
+            response.put("market_cap_percentage", data.getMarket_cap_percentage());
+            response.put("market_cap_change_percentage_24h_usd", data.getMarket_cap_change_percentage_24h_usd());
+            response.put("updated_at", data.getUpdated_at());
+            
+            return response;
+        }
+        return null;
+    }
+	
+	@GetMapping("/request")
+	public void requestApi() {
+		statisticService.requestApi();
+	}
+	
+}

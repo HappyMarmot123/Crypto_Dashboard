@@ -1,0 +1,33 @@
+package com.example.demo.client;
+
+import org.apache.http.HttpEntity; 
+import org.apache.http.HttpHeaders;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+@Component
+public class CoinGeckoApi {
+
+	OkHttpClient client = new OkHttpClient();
+
+	Request request = new Request.Builder()
+	  .url("https://api.coingecko.com/api/v3/global")
+	  .get()
+	  .addHeader("accept", "application/json")
+	  .addHeader("x-cg-demo-api-key", "CG-JbGd9nxRsDpasAXNHcdiLEnn")
+	  .build();
+
+	Response response = client.newCall(request).execute();
+}

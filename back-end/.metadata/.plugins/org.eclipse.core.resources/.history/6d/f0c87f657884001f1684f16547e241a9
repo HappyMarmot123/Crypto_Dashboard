@@ -1,0 +1,11 @@
+package com.example.app.statistic;
+
+import java.util.List; 
+import java.util.Map;
+
+import com.example.app.statistic.PayloadDataDto;
+
+public interface PayloadDataService {
+	List<?> getPayloadData(PayloadDataDto.DetailRequest request);
+	List<?> getPayloadDataDetailRow(PayloadDataDto.DetailRequest request);
+}

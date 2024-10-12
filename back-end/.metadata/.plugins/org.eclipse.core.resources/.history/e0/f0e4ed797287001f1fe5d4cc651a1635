@@ -1,0 +1,72 @@
+package com.example.demo.statistic;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.component.CoinGeckoApi;
+import com.example.demo.component.ScheduledTasks;
+
+import lombok.RequiredArgsConstructor;
+ 
+
+@RequiredArgsConstructor
+@Service
+public class StatisticServiceImpl {
+
+	private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private final CoinGeckoApi coinGeckoApi;
+	private final MongoTemplate mongoTemplate;
+	
+    public void requestApi() {
+    	try {
+    		String resonse = coinGeckoApi.fetchGlobalData();
+        	mongoTemplate.insert(resonse, "DailyTrend");
+        	log.info(resonse);
+        	log.info("Insert response into DB", dateFormat.format(new Date()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public List getStatistic() {
+    	try {
+    		Query query = new Query();
+    		query.with(Sort.by(
+    		        Sort.Order.desc("data.updated_at"), 
+    		        Sort.Order.desc("data.totalMarketCap"), 
+    		        Sort.Order.desc("data.total_volume")))
+    		     .limit(1);
+
+    		StatisticEntity results = mongoTemplate.findOne(query, StatisticEntity.class);
+    		String id = results.getId();
+            Data asdf = results.getData();
+            
+            Aggregation aggregation = Aggregation.newAggregation(
+                    Aggregation.match(Criteria.where("_id").is(id)), // _id로 필터링
+                    Aggregation.group() // 그룹화 (모든 문서를 하나로 묶음)
+                        .avg("data.totalMarketCap") // 평균 계산
+                        .as("averageTotalMarketCap") // 결과 필드 이름
+                );
+
+                // Aggregation 실행
+                AggregationResults<AverageResult> results2 = mongoTemplate.aggregate(aggregation, StatisticEntity.class, AverageResult.class);
+                Double averageTotalMarketCap = results2.getMappedResults().get(0).getAverageTotalMarketCap();
+                return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return null;
+    }
+}

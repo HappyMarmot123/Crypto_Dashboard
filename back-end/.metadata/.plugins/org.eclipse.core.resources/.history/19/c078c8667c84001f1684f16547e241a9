@@ -1,0 +1,52 @@
+package open.platform.kaia.server.common.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import lombok.RequiredArgsConstructor;
+import open.platform.kaia.server.authentication.AuthenticationRequestFilter;
+import open.platform.kaia.server.authentication.AuthenticationService;
+
+@Configuration
+@RequiredArgsConstructor
+public class SecurityConfig {
+	
+	private final AuthenticationService authenticationService;
+	
+	private static final String[] AUTH_WHITELIST = {
+			"/login", "/chkUid"
+    };
+
+	@Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+		 http
+			.authorizeRequests()
+			.requestMatchers(AUTH_WHITELIST).permitAll()
+			.anyRequest().hasAnyRole("admin", "user")
+			.and().cors();
+		
+		http.csrf().disable(); 
+	 	http.headers()
+	 		.frameOptions().sameOrigin(); 
+	 	
+	 	http.httpBasic().disable()
+				.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
+	 	http.addFilterBefore(new AuthenticationRequestFilter(authenticationService), UsernamePasswordAuthenticationFilter.class);
+ 	
+	 	return http.build();
+    }
+	
+	@Bean
+	public AuthenticationManager authenticationManager(
+			AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
+
+}

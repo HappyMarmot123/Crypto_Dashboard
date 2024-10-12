@@ -1,0 +1,47 @@
+package com.example.demo.component;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+@Component
+public class CoinGeckoApi {
+    private final OkHttpClient client;
+
+    public CoinGeckoApi() {
+        this.client = new OkHttpClient();
+    }
+
+    public List<String> fetchGlobalData(List<String> urls) throws IOException {
+    	 List<String> responses = new ArrayList<>();
+    	 
+         for (String url : urls) {
+             Request request = new Request.Builder()
+                     .url(url)
+                     .get()
+                     .addHeader("accept", "application/json")
+                     .addHeader("x-cg-pro-api-key", "CG-JbGd9nxRsDpasAXNHcdiLEnn")
+                     .build();
+
+             Response response = client.newCall(request).execute();
+             try {
+                 if (response.isSuccessful()) {
+                     String json = response.body().string();
+                     responses.add(json);
+                 } else {
+                     throw new IOException("Unexpected code " + response);
+                 }
+             } catch (Exception e) {
+                 e.printStackTrace();
+             }
+         }
+         
+         return responses;
+    }
+}

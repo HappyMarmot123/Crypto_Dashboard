@@ -1,0 +1,18 @@
+import org.springframework.boot.SpringApplication
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
+import org.springframework.context.annotation.Bean
+import org.springframework.core.env.Environment
+
+@SpringBootApplication
+class Application {
+
+    @Bean
+    fun webServerFactory(env: Environment): TomcatServletWebServerFactory {
+        return TomcatServletWebServerFactory().apply { setPort(8088) }
+    }
+}
+
+fun main(args: Array<String>) {
+    SpringApplication.run(Application::class.java, *args)
+}

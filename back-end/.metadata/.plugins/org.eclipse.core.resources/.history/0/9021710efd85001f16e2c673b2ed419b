@@ -1,0 +1,14 @@
+server:
+  port: 8088
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  tomcat:
+    connection-timeout: 120000
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://wapdev:dev2.WAPDEV.1024&^*@218.153.121.201:27017/coinTrend?authSource=admin

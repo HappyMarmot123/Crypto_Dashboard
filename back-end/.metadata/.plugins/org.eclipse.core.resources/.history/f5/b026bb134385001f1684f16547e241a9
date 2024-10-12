@@ -1,0 +1,9 @@
+package com.example.demo.statistic;
+
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface StatisticRepository extends QuerydslPredicateExecutor<StatisticDocument> {
+	
+}

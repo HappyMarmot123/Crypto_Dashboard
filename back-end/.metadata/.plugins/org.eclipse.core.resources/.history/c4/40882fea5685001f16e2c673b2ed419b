@@ -1,0 +1,16 @@
+package com.example.demo.statistic.repository;
+
+import java.util.List;
+
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.stereotype.Repository;
+
+import com.example.demo.statistic.StatisticDocument;
+import com.querydsl.core.types.dsl.BooleanExpression;
+
+@Repository
+public interface StatisticRepository extends MongoRepository<StatisticDocument, String> {
+	
+	List findAll();
+}

@@ -1,0 +1,109 @@
+package com.example.demo.statistic;
+
+import lombok.Builder;
+import lombok.Getter;
+
+import java.util.Map;
+
+@Getter
+@Builder
+public class StatisticResponse {
+    public StatisticResponse(Builder builder) {
+		// TODO Auto-generated constructor stub
+	}
+
+	private String id;
+    private int activeCryptocurrencies;
+    private int upcomingIcos;
+    private int ongoingIcos;
+    private int endedIcos;
+    private int markets;
+    private Map<String, Double> totalMarketCap;
+    private Map<String, Double> totalVolume;
+    private Map<String, Double> marketCapPercentage;
+    private double marketCapChangePercentage24hUsd;
+    private long updatedAt;
+
+    public static class Builder {
+        private String id;
+        private int activeCryptocurrencies;
+        private int upcomingIcos;
+        private int ongoingIcos;
+        private int endedIcos;
+        private int markets;
+        private Map<String, Double> totalMarketCap;
+        private Map<String, Double> totalVolume;
+        private Map<String, Double> marketCapPercentage;
+        private double marketCapChangePercentage24hUsd;
+        private long updatedAt;
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder setActiveCryptocurrencies(int activeCryptocurrencies) {
+            this.activeCryptocurrencies = activeCryptocurrencies;
+            return this;
+        }
+
+        public Builder setUpcomingIcos(int upcomingIcos) {
+            this.upcomingIcos = upcomingIcos;
+            return this;
+        }
+
+        public Builder setOngoingIcos(int ongoingIcos) {
+            this.ongoingIcos = ongoingIcos;
+            return this;
+        }
+
+        public Builder setEndedIcos(int endedIcos) {
+            this.endedIcos = endedIcos;
+            return this;
+        }
+
+        public Builder setMarkets(int markets) {
+            this.markets = markets;
+            return this;
+        }
+
+        public Builder setTotalMarketCap(Map<String, Double> totalMarketCap) {
+            this.totalMarketCap = totalMarketCap;
+            return this;
+        }
+
+        public Builder setTotalVolume(Map<String, Double> totalVolume) {
+            this.totalVolume = totalVolume;
+            return this;
+        }
+
+        public Builder setMarketCapPercentage(Map<String, Double> marketCapPercentage) {
+            this.marketCapPercentage = marketCapPercentage;
+            return this;
+        }
+
+        public Builder setMarketCapChangePercentage24hUsd(double marketCapChangePercentage24hUsd) {
+            this.marketCapChangePercentage24hUsd = marketCapChangePercentage24hUsd;
+            return this;
+        }
+
+        public Builder setUpdatedAt(long updatedAt) {
+            this.updatedAt = updatedAt;
+            return this;
+        }
+
+        public StatisticResponse build() {
+            return new StatisticResponse(this);
+        }
+    }
+
+	public static Object Builder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Object Builder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

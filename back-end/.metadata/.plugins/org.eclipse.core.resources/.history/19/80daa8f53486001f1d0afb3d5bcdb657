@@ -1,0 +1,85 @@
+package com.example.demo.statistic;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.MatchOperation;
+import org.springframework.data.mongodb.core.aggregation.ProjectionOperation;
+import org.springframework.data.mongodb.core.aggregation.SortOperation;
+import org.springframework.data.mongodb.core.aggregation.UnwindOperation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.component.CoinGeckoApi;
+import com.example.demo.component.ScheduledTasks;
+import com.example.demo.statistic.repository.StatisticRepository;
+
+import lombok.RequiredArgsConstructor;
+ 
+
+@RequiredArgsConstructor
+@Service
+public class StatisticServiceImpl {
+
+	private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	private final CoinGeckoApi coinGeckoApi;
+	private final StatisticRepository statisticRepository;
+	private final MongoTemplate mongoTemplate;
+
+	@Autowired
+    public StatisticServiceImpl(CoinGeckoApi coinGeckoApi, StatisticRepository statisticRepository, MongoTemplate mongoTemplate) {
+        this.coinGeckoApi = coinGeckoApi; 
+        this.statisticRepository = statisticRepository;
+        this.mongoTemplate = mongoTemplate;
+    }
+	
+    public void requestApi() {
+    	try {
+    		String resonse = coinGeckoApi.fetchGlobalData();
+        	mongoTemplate.insert(resonse, "DailyTrend");
+        	log.info(resonse);
+        	log.info("Insert response into DB", dateFormat.format(new Date()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public ArrayList getStatistic() {
+    	try {
+    		@SuppressWarnings("unchecked")
+    		ArrayList results = (ArrayList<StatisticEntity>) mongoTemplate.findAll(StatisticEntity.class);
+    		
+    		
+//            Aggregation getDaily = Aggregation.newAggregation(
+//                    Aggregation.project("data.total_market_cap"), // total_market_cap만 선택
+//                    Aggregation.unwind("data.total_market_cap"), // 각 통화별로 분리
+//                    Aggregation.group("data.total_market_cap.key") // 통화 키로 그룹화
+//                            .avg("data.total_market_cap.value").as("average")
+//                            .min("data.total_market_cap.value").as("min")
+//                            .max("data.total_market_cap.value").as("max")
+//            );
+//
+//    		// Execute the aggregation
+//    		AggregationResults<StatisticEntity> results = mongoTemplate.aggregate(getDaily, "DailyTrend", StatisticEntity.class);
+    		return results;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return null;
+    }
+}

@@ -1,0 +1,26 @@
+package com.example.welcome;
+
+import jakarta.validation.constraints.NotBlank;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class PayloadDataDto {
+	
+	@Getter
+	public static class DetailRequest {
+		
+		@NotBlank private String id;
+		private String sensorType;
+		
+		@Builder
+		public DetailRequest(String id, String sensorType) {
+			this.id = id;
+			this.sensorType = sensorType; //전
+		}
+	}
+	
+	
+}
