@@ -1,7 +1,7 @@
 "use client";
 
 import { ApexOptions } from "apexcharts";
-import React from "react";
+import React, { useMemo } from "react";
 import dynamic from "next/dynamic";
 import convertStringForm from "@/util/convertStringForm";
 
@@ -15,6 +15,10 @@ interface chartProps {
 }
 
 const ChartOne: React.FC<chartProps> = ({ title, data }) => {
+  const reverseData: any[] = useMemo(() => {
+    return [...data].reverse();
+  }, [data]);
+
   const options: ApexOptions = {
     legend: {
       show: false,
@@ -84,7 +88,7 @@ const ChartOne: React.FC<chartProps> = ({ title, data }) => {
     },
     xaxis: {
       type: "category",
-      categories: data.map((item: any) =>
+      categories: reverseData.map((item: any) =>
         convertStringForm(item.updatedAt, "date"),
       ),
       axisBorder: {
@@ -100,15 +104,15 @@ const ChartOne: React.FC<chartProps> = ({ title, data }) => {
           fontSize: "0px",
         },
       },
-      min: 1,
-      max: 3,
+      min: 0,
+      max: 2.5,
     },
   };
 
   const series = [
     {
       name: "시가총액 변화율",
-      data: data.map((item: any) => {
+      data: reverseData.map((item: any) => {
         const value = convertStringForm(item.capChange, "toFixed");
         return typeof value === "number" ? value : null;
       }),
@@ -130,7 +134,24 @@ const ChartOne: React.FC<chartProps> = ({ title, data }) => {
               >
                 {title}
               </p>
-              <p className="text-sm font-medium">12.04.2022 - 12.05.2022</p>
+              <p className="text-sm font-medium">
+                {reverseData.map((item, idx) => {
+                  if (idx === 0) {
+                    return (
+                      <span>
+                        {convertStringForm(item.updatedAt, "date")}
+                        {" ~ "}
+                      </span>
+                    );
+                  }
+                  if (idx === reverseData.length - 1) {
+                    return (
+                      <span>{convertStringForm(item.updatedAt, "date")}</span>
+                    );
+                  }
+                  return null;
+                })}
+              </p>
             </div>
           </div>
         </div>
