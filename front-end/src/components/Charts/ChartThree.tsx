@@ -1,64 +1,134 @@
+import convertStringForm from "@/util/convertStringForm";
 import { ApexOptions } from "apexcharts";
 import React from "react";
 import ReactApexChart from "react-apexcharts";
-
-const options: ApexOptions = {
-  chart: {
-    fontFamily: "Satoshi, sans-serif",
-    type: "donut",
-  },
-  colors: ["#3C50E0", "#6577F3", "#8FD0EF", "#0FADCF"],
-  labels: ["Desktop", "Tablet", "Mobile", "Unknown"],
-  legend: {
-    show: false,
-    position: "bottom",
-  },
-
-  plotOptions: {
-    pie: {
-      donut: {
-        size: "65%",
-        background: "transparent",
-      },
-    },
-  },
-  dataLabels: {
-    enabled: false,
-  },
-  responsive: [
-    {
-      breakpoint: 2600,
-      options: {
-        chart: {
-          width: 380,
-        },
-      },
-    },
-    {
-      breakpoint: 640,
-      options: {
-        chart: {
-          width: 200,
-        },
-      },
-    },
-  ],
-};
 
 interface chartProps {
   title: string;
   data: { [key: string]: number };
 }
 
-const ChartThree: React.FC<chartProps> = () => {
-  const series = [65, 34, 12, 56];
+const ChartThree: React.FC<chartProps> = ({ title, data }) => {
+  function getDataOf(type: string) {
+    const result = [];
+
+    if (type === "key") {
+      for (const key in data) {
+        typeof key === "string" && result.push(key);
+      }
+      return result || undefined;
+    }
+    if (type === "value") {
+      for (const key in data) {
+        typeof data[key] === "number" &&
+          result.push(convertStringForm(data[key], "toFixed"));
+      }
+      return result || undefined;
+    }
+  }
+
+  const colorArray = [
+    "#3C50E0", // 기존 블루 계열 1
+    "#6577F3", // 기존 블루 계열 2
+    "#8FD0EF", // 기존 블루 계열 3
+    "#0FADCF", // 기존 블루 계열 4
+    "#F3A683", // 피치
+    "#F8C291", // 살구
+    "#FF6B81", // 코랄
+    "#6AB04A", // 연두
+    "#F6B93B", // 머스터드
+    "#D6A2D6", // 라벤더
+  ];
+
+  const series = getDataOf("value") as number[];
+
+  const options: ApexOptions = {
+    chart: {
+      fontFamily: "Satoshi, sans-serif",
+      type: "donut",
+    },
+    colors: colorArray,
+    labels: getDataOf("key") as string[],
+    legend: {
+      show: false,
+      position: "bottom",
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    responsive: [
+      {
+        breakpoint: 2600,
+        options: {
+          chart: {
+            width: 380,
+          },
+        },
+      },
+      {
+        breakpoint: 640,
+        options: {
+          chart: {
+            width: 200,
+          },
+        },
+      },
+    ],
+    plotOptions: {
+      pie: {
+        donut: {
+          size: "65%",
+          background: "transparent",
+          labels: {
+            show: true,
+            name: {
+              fontSize: "20",
+              formatter(val) {
+                return "Total";
+              },
+            },
+            value: {
+              fontSize: "30",
+              formatter(val) {
+                return val;
+              },
+            },
+          },
+        },
+      },
+    },
+  };
+
+  const dataListComp = () => {
+    const elements = [];
+    var index = 0;
+    for (const key in data) {
+      elements.push(
+        <div className="w-full px-8 sm:w-1/2" key={key}>
+          <div className="flex w-full items-center">
+            <span
+              className={`mr-2 block h-3 w-full max-w-3 rounded-full`}
+              style={{ background: `${colorArray[index]}` }}
+            ></span>
+            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+              <span>{key}</span>
+              <span>{convertStringForm(data[key], "toFixed")}</span>
+            </p>
+          </div>
+        </div>,
+      );
+      index++;
+    }
+    index = 0;
+    return elements;
+  };
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-4">
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
           <h5 className="text-xl font-semibold text-black dark:text-white">
-            Visitors Analytics
+            {title}
           </h5>
         </div>
         <div>
@@ -73,42 +143,7 @@ const ChartThree: React.FC<chartProps> = () => {
       </div>
 
       <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
-        <div className="w-full px-8 sm:w-1/2">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-primary"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Desktop </span>
-              <span> 65% </span>
-            </p>
-          </div>
-        </div>
-        <div className="w-full px-8 sm:w-1/2">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#6577F3]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Tablet </span>
-              <span> 34% </span>
-            </p>
-          </div>
-        </div>
-        <div className="w-full px-8 sm:w-1/2">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#8FD0EF]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Mobile </span>
-              <span> 45% </span>
-            </p>
-          </div>
-        </div>
-        <div className="w-full px-8 sm:w-1/2">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#0FADCF]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
-              <span> Unknown </span>
-              <span> 12% </span>
-            </p>
-          </div>
-        </div>
+        {dataListComp()}
       </div>
     </div>
   );
