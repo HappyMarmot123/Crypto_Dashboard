@@ -23,5 +23,6 @@ public class ScheduledTasks {
 	@Scheduled(cron = "0 0 0 * * ?") // 매일 자정 00:00:00에 실행
 	public void reportCurrentTime() {
 		statisticServiceImpl.requestApi();
+		statisticServiceImpl.deleteStatistic();
 	}
 }

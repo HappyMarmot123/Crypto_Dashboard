@@ -30,4 +30,9 @@ public class StatisticController {
 		statisticService.requestApi();
 	}
 	
+	@GetMapping("/delete")
+	public void deleteDailyTrend() {
+		statisticService.deleteStatistic();
+	}
+	
 }

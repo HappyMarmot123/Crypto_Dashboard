@@ -3,6 +3,7 @@ package com.example.demo.statistic;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -27,7 +28,7 @@ public class StatisticEntity {
 	@MongoId
 	@Column(name="_id")
 	@Field(name="_id")
-    private String _id;
+    private ObjectId _id;
 	
 	@Column(name="data")
 	@Field(name="data")

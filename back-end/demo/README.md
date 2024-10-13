@@ -13,7 +13,11 @@
 1. root App에 mongo annotation 선언.
 2. MongoTemplate 사용 하기 위해서 빈 객체를 만들어야 한다.
 3. JSON 문자열로 데이터를 삽입하면 몽고db가 알아서 Object로 변환후 받는다.
-4. Aggregate + MongoTemplate이 그나마 기능이 많음.
+4. Aggregate 복잡한 통계 구현 가능 MongoTemplate을 사용하여 DB에 소통
+5. \_id를 id로 매핑하거나 String 자료형으로 선언해도 ㅆ!ㅣ발 에러가 안뜨니 유의할것.
+
+- @MongoId
+- private ObjectId \_id
 
 ## Lombok
 

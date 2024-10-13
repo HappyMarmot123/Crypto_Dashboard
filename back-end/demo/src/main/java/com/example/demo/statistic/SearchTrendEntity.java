@@ -2,6 +2,7 @@ package com.example.demo.statistic;
 
 import java.time.LocalDateTime;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -19,7 +20,7 @@ import lombok.ToString;
 public class SearchTrendEntity {
 	
 	@MongoId
-    public String _id;
+    public ObjectId _id;
     public Coin[] coins;
     private LocalDateTime updated_at;
     
@@ -39,7 +40,7 @@ public class SearchTrendEntity {
         public Data data;
         public String thumb;
         public String name;
-        public int marketCapRank;
+        public int market_cap_rank;
         public String id;
         public double priceBtc;
         public String slug;
@@ -48,12 +49,12 @@ public class SearchTrendEntity {
     @Getter
     @ToString
     public static class Data {
-        public String totalVolume;
-        public String marketCap;
+        public String total_volume;
+        public String market_cap;
         public double price;
-        public String marketCapBtc;
-        public String priceBtc;
-        public String totalVolumeBtc;
+        public String market_cap_btc;
+        public String price_btc;
+        public String total_volume_btc;
         public String sparkline;
         public String content;
     }

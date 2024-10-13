@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.ObjectOperators.ObjectToArray;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
@@ -146,5 +148,43 @@ public class StatisticServiceImpl {
             e.printStackTrace();
         }
 		return null;
+    }
+    
+    public void deleteStatistic() {
+//    	db.DailyTrend.find().sort({updated_at: 1}).skip(31).forEach(function(myDoc) {
+//    		  db.DailyTrend.deleteOne({ _id: myDoc._id });
+//    		});
+    	
+    	try {
+    	    Query query = new Query()
+    	            .with(Sort.by("updated_at").ascending())
+    	            .skip(31);
+    	    List<StatisticEntity> oldDocuments = mongoTemplate.find(query, StatisticEntity.class);
+    	    
+    	    for (StatisticEntity doc : oldDocuments) {
+    	        ObjectId idToDelete = doc.get_id();
+    	        Query deleteQuery = new Query(Criteria.where("_id").is(idToDelete));
+    	        
+    	        System.out.println("Deleting document with _id: " + idToDelete);
+    	        mongoTemplate.remove(deleteQuery, StatisticEntity.class, "DailyTrend");
+    	    }
+    	    
+    	    Query query2 = new Query()
+    	            .with(Sort.by("updated_at").ascending())
+    	            .skip(31);
+
+    	    List<SearchTrendEntity> oldDocuments2 = mongoTemplate.find(query2, SearchTrendEntity.class);
+
+    	    for (SearchTrendEntity doc : oldDocuments2) {
+    	        ObjectId idToDelete = doc.get_id();
+    	        Query deleteQuery = new Query(Criteria.where("_id").is(idToDelete));
+    	        
+    	        System.out.println("Deleting document with _id: " + idToDelete);
+    	        mongoTemplate.remove(deleteQuery, SearchTrendEntity.class, "SearchTrend");
+    	    }
+    	} catch (Exception e) {
+    	    e.printStackTrace();
+    	}
+
     }
 }

@@ -10,5 +10,5 @@
 //@Repository
 //public interface StatisticRepository extends MongoRepository<StatisticEntity, String> {
 //	
-//	List findAll(); 
+//	void deleteById(String id); 
 //}
