@@ -104,8 +104,8 @@ const ChartOne: React.FC<chartProps> = ({ title, data }) => {
           fontSize: "0px",
         },
       },
-      min: 0,
-      max: 2.5,
+      min: -1,
+      max: 2,
     },
   };
 

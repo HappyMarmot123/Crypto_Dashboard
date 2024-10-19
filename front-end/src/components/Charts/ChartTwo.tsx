@@ -71,6 +71,7 @@ const ChartTwo: React.FC<chartProps> = ({ title, data }) => {
       categories: sliceData.map((item: any) => item.k),
     },
     yaxis: {
+      show: false,
       min: 1,
       max: 1000000000000000,
     },
